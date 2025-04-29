@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nucleotide Database</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Nucleotide Database</h1>
+        
+        <!-- Form for adding new nucleotide sequence -->
+        <form id="nucleotide-form">
+            <label for="sequence-id">Sequence ID:</label>
+            <input type="text" id="sequence-id" placeholder="Enter sequence ID" required>
+            
+            <label for="nucleotide-sequence">Nucleotide Sequence:</label>
+            <textarea id="nucleotide-sequence" rows="4" placeholder="Enter nucleotide sequence" required></textarea>
+            
+            <button type="submit">Add Sequence</button>
+        </form>
+        
+        <h2>Stored Sequences</h2>
+        <!-- Table to display stored sequences -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Sequence ID</th>
+                    <th>Nucleotide Sequence</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="sequence-table-body">
+                <!-- Rows will be added dynamically here -->
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        // Store nucleotide sequences locally
+        let sequences = [];
+
+        // Function to add a new nucleotide sequence
+        function addSequence(event) {
+            event.preventDefault();
+            
+            const id = document.getElementById("sequence-id").value;
+            const sequence = document.getElementById("nucleotide-sequence").value;
+
+            if (!id || !sequence) {
+                alert("Please fill in both fields.");
+                return;
+            }
+
+            // Add sequence to array
+            sequences.push({ id: id, sequence: sequence });
+
+            // Update the table with new data
+            updateTable();
+
+            // Clear the form
+            document.getElementById("nucleotide-form").reset();
+        }
+
+        // Function to delete a sequence
+        function deleteSequence(index) {
+            sequences.splice(index, 1);
+            updateTable();
+        }
+
+        // Function to update the sequence table
+        function updateTable() {
+            const tableBody = document.getElementById("sequence-table-body");
+            tableBody.innerHTML = ""; // Clear table body
+
+            sequences.forEach((seq, index) => {
+                const row = document.createElement("tr");
+                
+                const idCell = document.createElement("td");
+                idCell.textContent = seq.id;
+
+                const sequenceCell = document.createElement("td");
+                sequenceCell.textContent = seq.sequence;
+
+                const actionCell = document.createElement("td");
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.onclick = () => deleteSequence(index);
+
+                actionCell.appendChild(deleteButton);
+                row.appendChild(idCell);
+                row.appendChild(sequenceCell);
+                row.appendChild(actionCell);
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Add event listener for form submission
+        document.getElementById("nucleotide-form").addEventListener("submit", addSequence);
+    </script>
+</body>
+</html>

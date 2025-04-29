@@ -1,0 +1,20 @@
+
+<?php
+// MySQL database connection details
+$servername = "localhost";  // WAMP default is localhost
+$username = "root";         // WAMP default user is 'root'
+$password = "";             // WAMP default has no password
+$dbname = "nucseqdata_1;";        // Database name
+
+// Create a connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+echo "Connected successfully";
+ 
+// Close the connection
+$conn->close();
+?>
